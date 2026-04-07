@@ -5,6 +5,7 @@ import morgan from 'morgan'
 import { errorHandler } from './middleware/errorHandler'
 import { healthRouter } from './routes/healthRoutes'
 import { NotFoundError } from './errors/AppError'
+import { authRouter } from './routes/authRoutes'
 
 const app = express()
 
@@ -15,6 +16,7 @@ app.use(morgan('dev'))
 
 // ─── Rutas ────────────────────────────────────────────────────────────────────
 app.use('/api/health', healthRouter)
+app.use('/api/auth', authRouter)
 
 // ─── Rutas no encontradas ─────────────────────────────────────────────────────
 app.use((_req, _res, next) => {
