@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum Role {
+  ADMIN
+  STUDENT
+}
+
+enum WineType {
+  RED
+  WHITE
+  ROSE
+  SPARKLING
+  ORANGE
+}
+
+enum GrapeType {
+  RED
+  WHITE
+}
+
+// ─── User ─────────────────────────────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         Role     @default(STUDENT)
+  isApproved   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tastingNotes TastingNote[]
+  inviteCodes  InviteCode[]  @relation("CreatedBy")
+  usedInvite   InviteCode?   @relation("UsedBy")
+  deviceTokens DeviceToken[]
+
+  @@map("users")
+}
+
+// ─── TastingNote ──────────────────────────────────────────────────────────────
+
+model TastingNote {
+  id             String    @id @default(uuid())
+  userId         String
+  wineName       String
+  winery         String
+  grape          String
+  region         String?
+  type           WineType
+  visualNotes    String?
+  firstNose      String?
+  secondNose     String?
+  palateNotes    String?
+  score          Float
+  privateNotes   String?
+  labelPhotoUrl  String?
+  tastingDate    DateTime
+  isShared       Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("tasting_notes")
+}
+
+// ─── Winery ───────────────────────────────────────────────────────────────────
+
+model Winery {
+  id           String   @id @default(uuid())
+  name         String   @unique
+  region       String
+  province     String
+  country      String   @default("Argentina")
+  foundedYear  Int?
+  owners       String?
+  winemakers   String?
+  history      String?
+  mainGrapes   String
+  tier         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  foodPairings FoodPairing[]
+
+  @@map("wineries")
+}
+
+// ─── Grape ────────────────────────────────────────────────────────────────────
+
+model Grape {
+  id            String    @id @default(uuid())
+  name          String    @unique
+  type          GrapeType
+  origin        String
+  country       String    @default("Argentina")
+  servingTemp   String
+  flavorProfile String
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  foodPairings FoodPairing[]
+
+  @@map("grapes")
+}
+
+// ─── StudyTopic ───────────────────────────────────────────────────────────────
+
+model StudyTopic {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  category  String
+  order     Int
+  version   String   @default("1.0")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("study_topics")
+}
+
+// ─── FoodPairing ──────────────────────────────────────────────────────────────
+
+model FoodPairing {
+  id           String  @id @default(uuid())
+  grapeId      String?
+  wineryId     String?
+  foodCategory String
+  foodExamples String
+  description  String?
+
+  grape  Grape?  @relation(fields: [grapeId],  references: [id], onDelete: SetNull)
+  winery Winery? @relation(fields: [wineryId], references: [id], onDelete: SetNull)
+
+  @@map("food_pairings")
+}
+
+// ─── InviteCode ───────────────────────────────────────────────────────────────
+
+model InviteCode {
+  id          String    @id @default(uuid())
+  code        String    @unique @default(uuid())
+  createdById String
+  usedById    String?   @unique
+  usedAt      DateTime?
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+
+  createdBy User  @relation("CreatedBy", fields: [createdById], references: [id])
+  usedBy    User? @relation("UsedBy",    fields: [usedById],    references: [id])
+
+  @@map("invite_codes")
+}
+
+// ─── DeviceToken ──────────────────────────────────────────────────────────────
+
+model DeviceToken {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique
+  platform  String   @default("iOS")
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("device_tokens")
+}
