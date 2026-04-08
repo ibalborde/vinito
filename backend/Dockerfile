@@ -6,6 +6,8 @@ COPY package*.json ./
 RUN npm ci
 
 COPY prisma ./prisma
+
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
 RUN npx prisma generate
 
 COPY . .
@@ -19,6 +21,8 @@ COPY package*.json ./
 RUN npm ci --only=production
 
 COPY prisma ./prisma
+
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
 RUN npx prisma generate
 
 COPY --from=builder /app/dist ./dist
