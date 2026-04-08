@@ -7,6 +7,9 @@ import { healthRouter } from './routes/healthRoutes'
 import { NotFoundError } from './errors/AppError'
 import { authRouter } from './routes/authRoutes'
 import { tastingNoteRouter } from './routes/tastingNoteRoutes'
+import { wineryRouter }     from './routes/wineryRoutes'
+import { grapeRouter }      from './routes/grapeRoutes'
+import { studyTopicRouter } from './routes/studyTopicRoutes'
 
 const app = express()
 
@@ -19,6 +22,9 @@ app.use(morgan('dev'))
 app.use('/api/health', healthRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/tasting-notes', tastingNoteRouter)
+app.use('/api/wineries',     wineryRouter)
+app.use('/api/grapes',       grapeRouter)
+app.use('/api/study-topics', studyTopicRouter)
 
 // ─── Rutas no encontradas ─────────────────────────────────────────────────────
 app.use((_req, _res, next) => {
