@@ -3,13 +3,13 @@ import { env } from './env'
 
 interface TokenPayload {
   userId: string
-  email: string
-  role: string
+  email:  string
+  role:   string
 }
 
 export function generateToken(payload: TokenPayload): string {
   return jwt.sign(payload, env.jwt.secret, {
-    expiresIn: env.jwt.expiresIn,
+    expiresIn: 60 * 60 * 24 * 7,
   })
 }
 

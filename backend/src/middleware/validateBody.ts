@@ -7,9 +7,8 @@ export function validateBody(schema: ZodSchema) {
     const result = schema.safeParse(req.body)
 
     if (!result.success) {
-      const issues = result.error?.issues ?? result.error?.errors ?? []
-      const message = issues.length > 0
-        ? issues.map((e: { message: string }) => e.message).join(', ')
+      const message = result.error.issues.length > 0
+        ? result.error.issues.map((i) => i.message).join(', ')
         : 'Datos inválidos'
       next(new ValidationError(message))
       return
