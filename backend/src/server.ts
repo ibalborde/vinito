@@ -1,4 +1,7 @@
-console.log('>>> EL CONTENEDOR ESTÁ VIVO Y EJECUTANDO SERVER.TS <<<');
+console.log("-----------------------------------------");
+console.log("BOOTING VINITO BACKEND...");
+console.log("NODE_ENV:", process.env.NODE_ENV);
+console.log("-----------------------------------------");
 
 import app from './app'
 import { env } from './config/env'
