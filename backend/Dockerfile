@@ -5,12 +5,6 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
-COPY prisma ./prisma
-COPY prisma.config.ts ./
-
-RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" \
-    npx prisma generate --schema=prisma/schema.prisma
-
 COPY . .
 RUN npm run build
 
@@ -21,13 +15,10 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production
 
-COPY prisma ./prisma
-
-RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" \
-    npx prisma generate --schema=prisma/schema.prisma
-
 COPY --from=builder /app/dist ./dist
+COPY prisma ./prisma
+COPY prisma.config.ts ./
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/server.js"]
+CMD ["sh", "-c", "npx prisma generate && npx prisma migrate deploy && node dist/server.js"]
