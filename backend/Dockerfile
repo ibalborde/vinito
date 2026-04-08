@@ -18,4 +18,4 @@ RUN ls dist/server.js || (echo "BUILD FAILED" && exit 1)
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/server.js 2>&1 || echo 'NODE FAILED WITH EXIT CODE '$?"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node --unhandled-rejections=throw dist/server.js"]
