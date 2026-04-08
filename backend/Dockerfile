@@ -17,4 +17,4 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "ls -la && ls dist/ 2>/dev/null || echo 'dist/ NOT FOUND' && npx prisma migrate deploy && node dist/server.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && echo '=== dist contents ===' && ls -la dist/ && echo '=== starting node ===' && node dist/server.js"]
