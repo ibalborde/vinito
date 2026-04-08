@@ -17,7 +17,7 @@ struct MainTabView: View {
                     Label("Mis Catas", systemImage: "wineglass")
                 }
 
-            Text("Nueva Cata")
+            NewTastingNoteView { _ in }
                 .tabItem {
                     Label("Nueva Cata", systemImage: "plus.circle")
                 }
@@ -32,7 +32,7 @@ struct MainTabView: View {
                     Label("Cepas", systemImage: "leaf")
                 }
 
-            Text("Estudio")
+            StudyView()
                 .tabItem {
                     Label("Estudio", systemImage: "book")
                 }
