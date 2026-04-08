@@ -7,10 +7,9 @@ RUN npm ci
 
 COPY prisma ./prisma
 COPY prisma.config.ts ./
-
-RUN echo 'DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"' > .env
-RUN npx prisma generate
-RUN rm .env
+RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" \
+    PRISMA_SKIP_DATABASE_CONNECT=true \
+    npx prisma generate
 
 COPY . .
 RUN npm run build
@@ -23,12 +22,9 @@ COPY package*.json ./
 RUN npm ci --only=production
 
 COPY prisma ./prisma
-COPY prisma.config.ts ./
 
-RUN echo 'DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"' > .env
-RUN npx prisma generate
-RUN rm .env
-
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/dist ./dist
 
 EXPOSE 3000
