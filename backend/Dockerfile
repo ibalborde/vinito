@@ -6,7 +6,6 @@ COPY package*.json ./
 RUN npm ci
 
 COPY prisma ./prisma
-COPY prisma.config.ts ./
 
 RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" \
     PRISMA_SKIP_DATABASE_CONNECT=true \
