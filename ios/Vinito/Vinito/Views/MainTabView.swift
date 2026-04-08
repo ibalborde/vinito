@@ -27,7 +27,7 @@ struct MainTabView: View {
                     Label("Bodegas", systemImage: "building.2")
                 }
 
-            Text("Cepas")
+            GrapesView()
                 .tabItem {
                     Label("Cepas", systemImage: "leaf")
                 }
