@@ -12,7 +12,7 @@ struct MainTabView: View {
 
     var body: some View {
         TabView {
-            Text("Mis Catas")
+            TastingNotesListView()
                 .tabItem {
                     Label("Mis Catas", systemImage: "wineglass")
                 }
@@ -22,7 +22,7 @@ struct MainTabView: View {
                     Label("Nueva Cata", systemImage: "plus.circle")
                 }
 
-            Text("Bodegas")
+            WineriesView()
                 .tabItem {
                     Label("Bodegas", systemImage: "building.2")
                 }
