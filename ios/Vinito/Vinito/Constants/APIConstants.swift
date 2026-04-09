@@ -12,7 +12,7 @@ enum APIConstants {
         #if DEBUG
         return "http://localhost:3000/api"
         #else
-        return ProcessInfo.processInfo.environment["API_BASE_URL"] ?? "http://localhost:3000/api"
+        return "https://vinito-production.up.railway.app/api"
         #endif
     }()
 
