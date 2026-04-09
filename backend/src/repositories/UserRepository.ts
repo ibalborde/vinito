@@ -22,6 +22,21 @@ export class UserRepository {
     })
   }
 
+   async findAll(): Promise<Omit<User, 'passwordHash'>[]> {
+    return prisma.user.findMany({
+      select: {
+        id:          true,
+        email:       true,
+        name:        true,
+        role:        true,
+        isApproved:  true,
+        createdAt:   true,
+        updatedAt:   true,
+      },
+      orderBy: { createdAt: 'desc' },
+    })
+  }
+
   async create(data: CreateUserData): Promise<User> {
     return prisma.user.create({
       data,
