@@ -18,3 +18,6 @@ RUN ls dist/server.js || (echo "BUILD FAILED" && exit 1)
 EXPOSE 3000
 
 CMD ["sh", "-c", "npx prisma migrate deploy && node --unhandled-rejections=throw dist/server.js"]
+
+COPY start.sh ./
+RUN chmod +x start.sh
