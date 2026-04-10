@@ -1,8 +1,13 @@
-import { defineConfig } from 'vite' // Usamos vite directamente ya que vitest lo re-exporta
-
-export default defineConfig({
+export default {
   test: {
-    globals: true,
-    environment: 'node',
+    globals:      true,
+    environment:  'node',
+    include:      ['tests/**/*.test.ts'],
+    setupFiles:   ['tests/setup.ts'],
+    server: {
+      deps: {
+        inline: ['supertest'],
+      },
+    },
   },
-})
+}

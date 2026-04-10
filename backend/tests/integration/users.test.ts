@@ -5,8 +5,8 @@ import prisma from '../../src/config/prisma'
 
 const request = supertest(app)
 
-const ADMIN_EMAIL    = 'ibalborde@gmail.com'
-const ADMIN_PASSWORD = 'vinito_admin_2026'
+const ADMIN_EMAIL    = 'admin_test@vinito.com'
+const ADMIN_PASSWORD = 'adminpass123'
 const TEST_EMAIL     = 'test_user_v2@vinito.com'
 
 let adminToken: string
@@ -14,15 +14,28 @@ let testUserId: string
 
 beforeAll(async () => {
   await prisma.user.deleteMany({
-    where: { email: TEST_EMAIL },
+    where: { email: { in: [ADMIN_EMAIL, TEST_EMAIL] } },
   })
 
-  const adminLogin = await request
+  // Crear admin
+  const adminRes = await request
+    .post('/api/auth/register')
+    .send({ email: ADMIN_EMAIL, password: ADMIN_PASSWORD, name: 'Admin Test' })
+
+  // Promover a ADMIN directamente en BD
+  await prisma.user.update({
+    where: { email: ADMIN_EMAIL },
+    data:  { role: 'ADMIN' },
+  })
+
+  // Login como admin
+  const loginRes = await request
     .post('/api/auth/login')
     .send({ email: ADMIN_EMAIL, password: ADMIN_PASSWORD })
 
-  adminToken = adminLogin.body.token
+  adminToken = loginRes.body.token
 
+  // Crear usuario de test
   const newUser = await request
     .post('/api/auth/register')
     .send({ email: TEST_EMAIL, password: 'password123', name: 'Test User V2' })
@@ -32,7 +45,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await prisma.user.deleteMany({
-    where: { email: TEST_EMAIL },
+    where: { email: { in: [ADMIN_EMAIL, TEST_EMAIL] } },
   })
   await prisma.$disconnect()
 })
