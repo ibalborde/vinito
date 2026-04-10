@@ -43,12 +43,10 @@ export class TastingNoteService {
     filters: TastingNoteFiltersInput
   ): Promise<PaginatedResult<TastingNotePublic>> {
     const { page, limit, ...noteFilters } = filters
-    const { notes, total } = await this.repository.findAllShared(
-      noteFilters,
+    const { data, total } = await this.repository.findAllShared(
       { page, limit }
     )
-
-    return this.buildPaginatedResult(notes, total, page, limit)
+    return this.buildPaginatedResult(data, total, page, limit)
   }
 
   async getNoteById(
