@@ -52,25 +52,50 @@ export class TastingNoteRepository {
     return { notes, total }
   }
 
-  async findAllShared(
-    filters:    TastingNoteFilters,
-    pagination: PaginationParams
-  ): Promise<{ notes: TastingNotePublic[]; total: number }> {
-    const where = this.buildWhereClause({ ...filters, isShared: true })
+async findAllShared(params: PaginationParams) {
+  const { page, limit } = params
+  const skip = (page - 1) * limit
 
-    const [notes, total] = await prisma.$transaction([
-      prisma.tastingNote.findMany({
-        where,
-        orderBy: { tastingDate: 'desc' },
-        skip:  (pagination.page - 1) * pagination.limit,
-        take:  pagination.limit,
-        select: this.publicSelect(),
-      }),
-      prisma.tastingNote.count({ where }),
-    ])
+  const [data, total] = await Promise.all([
+    prisma.tastingNote.findMany({
+      where:   { isShared: true },
+      skip,
+      take:    limit,
+      orderBy: { tastingDate: 'desc' },
+     select: {
+        id:            true,
+        userId:        true,
+        wineName:      true,
+        winery:        true,
+        grape:         true,
+        region:        true,
+        type:          true,
+        visualNotes:   true,
+        firstNose:     true,
+        secondNose:    true,
+        palateNotes:   true,
+        score:         true,
+        tastingDate:   true,
+        isShared:      true,
+        labelPhotoUrl: true,
+        createdAt:     true,
+        updatedAt:     true,
+        user: {
+          select: { name: true }
+        }
+        },
+    }),
+    prisma.tastingNote.count({ where: { isShared: true } }),
+  ])
 
-    return { notes: notes as TastingNotePublic[], total }
-  }
+  const mapped = data.map((note: any) => ({
+    ...note,
+    userName: note.user?.name ?? null,
+    user:     undefined,
+  }))
+
+  return { data: mapped, total }
+}
 
   async findByUserAndId(
     userId: string,
