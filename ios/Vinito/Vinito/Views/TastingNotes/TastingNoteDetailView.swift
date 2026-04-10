@@ -160,12 +160,6 @@ struct TastingNoteDetailView: View {
     }
 
     private var formattedDate: String {
-        let formatter = ISO8601DateFormatter()
-        guard let date = formatter.date(from: note.tastingDate) else {
-            return note.tastingDate
-        }
-        let display        = DateFormatter()
-        display.dateFormat = "dd/MM/yyyy"
-        return display.string(from: date)
+        note.tastingDate.formattedTastingDate()
     }
 }

@@ -49,8 +49,14 @@ final class EditTastingNoteViewModel: ObservableObject {
         self.privateNotes = note.privateNotes ?? ""
         self.isShared     = note.isShared
 
-        let formatter = ISO8601DateFormatter()
-        self.tastingDate  = formatter.date(from: note.tastingDate) ?? Date()
+        let isoFull = ISO8601DateFormatter()
+        isoFull.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+        let isoBasic = ISO8601DateFormatter()
+
+        self.tastingDate = isoFull.date(from: note.tastingDate)
+            ?? isoBasic.date(from: note.tastingDate)
+            ?? Date()
     }
 
     var isValid: Bool {
@@ -62,8 +68,9 @@ final class EditTastingNoteViewModel: ObservableObject {
     func save() async -> TastingNote? {
         await MainActor.run { isLoading = true }
 
-        let formatter      = ISO8601DateFormatter()
-        formatter.timeZone = TimeZone.current
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime]
+        formatter.timeZone = TimeZone(identifier: "UTC")
 
         let request = UpdateTastingNoteRequest(
             wineName:     wineName.trimmingCharacters(in: .whitespaces),

@@ -14,21 +14,41 @@ struct TastingNotesListView: View {
 
     var body: some View {
         NavigationStack {
-            Group {
-                if viewModel.isLoading && viewModel.notes.isEmpty {
-                    LoadingView()
-                } else if !viewModel.errorMessage.isEmpty && viewModel.notes.isEmpty {
-                    ErrorView(message: viewModel.errorMessage) {
+            VStack(spacing: 0) {
+                HStack {
+                    Picker("Vista", selection: $viewModel.showingMine) {
+                        Text("Mis catas").tag(true)
+                        Text("Grupo").tag(false)
+                    }
+                    .pickerStyle(.segmented)
+                    .onChange(of: viewModel.showingMine) { _, _ in
                         Task { await viewModel.loadNotes() }
                     }
-                } else if viewModel.notes.isEmpty {
-                    EmptyStateView(
-                        icon:    "wineglass",
-                        title:   "Sin catas todavía",
-                        message: "Tocá + para registrar tu primera nota de cata"
-                    )
-                } else {
-                    notesList
+
+                    Spacer()
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+                .background(Color(.systemBackground))
+
+                Divider()
+
+                Group {
+                    if viewModel.isLoading && viewModel.notes.isEmpty {
+                        LoadingView()
+                    } else if !viewModel.errorMessage.isEmpty && viewModel.notes.isEmpty {
+                        ErrorView(message: viewModel.errorMessage) {
+                            Task { await viewModel.loadNotes() }
+                        }
+                    } else if viewModel.notes.isEmpty {
+                        EmptyStateView(
+                            icon:    "wineglass",
+                            title:   "Sin catas todavía",
+                            message: "Tocá + para registrar tu primera nota de cata"
+                        )
+                    } else {
+                        notesList
+                    }
                 }
             }
             .navigationTitle("Catas")
@@ -38,12 +58,8 @@ struct TastingNotesListView: View {
                         showingNewNote = true
                     } label: {
                         Image(systemName: "plus")
+                            .foregroundStyle(Color.wineRed)
                     }
-                    .tint(Color.wineRed)
-                }
-
-                ToolbarItem(placement: .topBarLeading) {
-                    segmentedPicker
                 }
             }
             .sheet(isPresented: $showingNewNote) {

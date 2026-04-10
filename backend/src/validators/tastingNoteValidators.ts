@@ -16,7 +16,9 @@ export const CreateTastingNoteSchema = z.object({
     .min(1,  'El puntaje mínimo es 1')
     .max(10, 'El puntaje máximo es 10'),
   privateNotes: z.string().max(2000).optional(),
-  tastingDate:  z.string().datetime({ message: 'Fecha inválida' }),
+  tastingDate: z.string().refine((val) => {
+  return !isNaN(new Date(val).getTime())
+}, { message: 'Fecha inválida' }),
   isShared:     z.boolean().optional().default(true),
 })
 

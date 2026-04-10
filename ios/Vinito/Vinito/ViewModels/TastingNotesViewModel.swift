@@ -85,14 +85,12 @@ final class TastingNotesViewModel: ObservableObject {
     }
 
     func switchToMine() async {
-        guard !showingMine else { return }
-        showingMine = true
+        await MainActor.run { showingMine = true }
         await loadNotes()
     }
 
     func switchToGroup() async {
-        guard showingMine else { return }
-        showingMine = false
+        await MainActor.run { showingMine = false }
         await loadNotes()
     }
 
