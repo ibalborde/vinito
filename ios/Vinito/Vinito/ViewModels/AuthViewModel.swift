@@ -91,6 +91,26 @@ final class AuthViewModel: ObservableObject {
     }
 
     private func checkExistingToken() {
-        isAuthenticated = TokenStorage.shared.read() != nil
+        guard let token = TokenStorage.shared.read() else {
+            isAuthenticated = false
+            return
+        }
+        
+        // Decodificar el payload del JWT para obtener los datos del usuario
+        let parts = token.split(separator: ".")
+        guard parts.count == 3,
+              let payloadData = Data(base64Encoded: String(parts[1])
+                  .replacingOccurrences(of: "-", with: "+")
+                  .replacingOccurrences(of: "_", with: "/")
+                  .padding(toLength: ((String(parts[1]).count + 3) / 4) * 4,
+                          withPad: "=",
+                          startingAt: 0)),
+              let payload = try? JSONSerialization.jsonObject(with: payloadData) as? [String: Any]
+        else {
+            isAuthenticated = true
+            return
+        }
+        
+        isAuthenticated = true
     }
 }
