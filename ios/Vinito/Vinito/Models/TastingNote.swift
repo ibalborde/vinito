@@ -25,6 +25,7 @@ struct TastingNote: Codable, Identifiable {
     let tastingDate:   String
     let isShared:      Bool
     let createdAt:     String
+    let userName:     String?  // nombre del autor — viene del endpoint /group
 
     enum WineType: String, Codable, CaseIterable {
         case red      = "RED"

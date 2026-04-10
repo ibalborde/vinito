@@ -103,7 +103,8 @@ struct TastingNotesListView: View {
     private var notesList: some View {
         List {
             ForEach(viewModel.notes) { note in
-                TastingNoteRowView(note: note)
+                TastingNoteRowView(note: note,
+                                   showAuthor: !viewModel.showingMine)
                     .contentShape(Rectangle())
                     .onTapGesture {
                         selectedNote = note
