@@ -15,7 +15,7 @@ struct TastingNotesListView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                HStack {
+                HStack(spacing: 12) {
                     Picker("Vista", selection: $viewModel.showingMine) {
                         Text("Mis catas").tag(true)
                         Text("Grupo").tag(false)
@@ -25,10 +25,16 @@ struct TastingNotesListView: View {
                         Task { await viewModel.loadNotes() }
                     }
 
-                    Spacer()
+                    Button {
+                        showingNewNote = true
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.title2)
+                            .foregroundStyle(Color.wineRed)
+                    }
                 }
                 .padding(.horizontal)
-                .padding(.vertical, 8)
+                .padding(.vertical, 10)
                 .background(Color(.systemBackground))
 
                 Divider()
@@ -52,16 +58,7 @@ struct TastingNotesListView: View {
                 }
             }
             .navigationTitle("Catas")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        showingNewNote = true
-                    } label: {
-                        Image(systemName: "plus")
-                            .foregroundStyle(Color.wineRed)
-                    }
-                }
-            }
+            .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showingNewNote) {
                 NewTastingNoteView { newNote in
                     viewModel.addNote(newNote)

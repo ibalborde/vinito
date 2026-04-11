@@ -30,6 +30,7 @@ struct GrapesView: View {
                 }
             }
             .navigationTitle("Cepas")
+            .navigationBarTitleDisplayMode(.inline)
             .searchable(
                 text:   $viewModel.searchText,
                 prompt: "Buscar cepa..."

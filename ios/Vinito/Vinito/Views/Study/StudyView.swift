@@ -30,6 +30,7 @@ struct StudyView: View {
                 }
             }
             .navigationTitle("Estudio")
+            .navigationBarTitleDisplayMode(.inline)
             .safeAreaInset(edge: .top) {
                 categoryFilter
             }

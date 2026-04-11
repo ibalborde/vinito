@@ -58,7 +58,7 @@ struct WineryDetailView: View {
                     Image(systemName: "calendar")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    Text("Fundada en \(year)")
+                    Text("Fundada en \(year, format: .number.grouping(.never))")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

@@ -30,6 +30,7 @@ struct WineriesView: View {
                 }
             }
             .navigationTitle("Bodegas")
+            .navigationBarTitleDisplayMode(.inline)
             .searchable(
                 text:   $viewModel.searchText,
                 prompt: "Buscar bodega..."
