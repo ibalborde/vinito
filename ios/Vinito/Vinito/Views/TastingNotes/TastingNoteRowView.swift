@@ -45,12 +45,12 @@ struct TastingNoteRowView: View {
                     Text(note.grape)
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                        .lineLimit(1)
 
                     if showAuthor, let userName = note.userName {
                         Text("·")
                             .foregroundStyle(.secondary)
                             .font(.caption)
-
                         HStack(spacing: 3) {
                             Image(systemName: "person.fill")
                                 .font(.caption2)
@@ -59,6 +59,7 @@ struct TastingNoteRowView: View {
                                 .font(.caption)
                                 .fontWeight(.medium)
                                 .foregroundStyle(Color.wineRed)
+                                .lineLimit(1)
                         }
                     }
                 }
@@ -70,7 +71,8 @@ struct TastingNoteRowView: View {
                 .font(.caption2)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.trailing)
+                .fixedSize()
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, 6)
     }
 }
