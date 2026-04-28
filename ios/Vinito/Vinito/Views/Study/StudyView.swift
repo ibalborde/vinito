@@ -9,6 +9,7 @@ import SwiftUI
 
 struct StudyView: View {
     @StateObject private var viewModel = StudyViewModel()
+    @State private var showQuiz = false
 
     var body: some View {
         NavigationStack {
@@ -31,8 +32,21 @@ struct StudyView: View {
             }
             .navigationTitle("Estudio")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showQuiz = true
+                    } label: {
+                        Label("Quiz", systemImage: "brain.head.profile")
+                    }
+                    .foregroundStyle(Color.wineRed)
+                }
+            }
             .safeAreaInset(edge: .top) {
                 categoryFilter
+            }
+            .sheet(isPresented: $showQuiz) {
+                QuizSetupView()
             }
         }
         .task {

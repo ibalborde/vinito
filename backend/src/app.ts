@@ -10,6 +10,7 @@ import { tastingNoteRouter } from './routes/tastingNoteRoutes'
 import { wineryRouter }     from './routes/wineryRoutes'
 import { grapeRouter }      from './routes/grapeRoutes'
 import { studyTopicRouter } from './routes/studyTopicRoutes'
+import { questionRouter }   from './routes/questionRoutes'
 import { userRouter } from './routes/userRoutes'
 
 const app = express()
@@ -26,6 +27,7 @@ app.use('/api/tasting-notes', tastingNoteRouter)
 app.use('/api/wineries',     wineryRouter)
 app.use('/api/grapes',       grapeRouter)
 app.use('/api/study-topics', studyTopicRouter)
+app.use('/api/questions',   questionRouter)
 app.use('/api/users', userRouter)
 
 // ─── Rutas no encontradas ─────────────────────────────────────────────────────

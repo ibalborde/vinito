@@ -453,12 +453,406 @@ async function seedStudyTopics() {
   console.log(`✓ ${topics.length} temas de estudio cargados`)
 }
 
+async function seedQuestions() {
+  type OptionInput = { text: string; isCorrect: boolean }
+  type QuestionInput = {
+    id:          string
+    text:        string
+    explanation: string
+    category:    string
+    difficulty:  string
+    options:     OptionInput[]
+  }
+
+  const questions: QuestionInput[] = [
+    // ── CEPAS ──────────────────────────────────────────────────────────────────
+    {
+      id:          'seed-q-1',
+      text:        '¿Cuál es la cepa tinta emblema de Argentina?',
+      explanation: 'El Malbec, originario de Cahors (Francia), encontró en Argentina —especialmente en Mendoza— su tierra prometida, produciendo vinos de mayor cuerpo y color que en su tierra de origen.',
+      category:    'cepas',
+      difficulty:  'easy',
+      options: [
+        { text: 'Cabernet Sauvignon', isCorrect: false },
+        { text: 'Malbec',             isCorrect: true  },
+        { text: 'Syrah',              isCorrect: false },
+        { text: 'Bonarda',            isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-2',
+      text:        '¿Cuál es la cepa blanca emblema de Argentina?',
+      explanation: 'El Torrontés es una cepa autóctona de Argentina, cruce de Moscatel de Alejandría y Listán Prieto. Los mejores ejemplares provienen de Cafayate, Salta.',
+      category:    'cepas',
+      difficulty:  'easy',
+      options: [
+        { text: 'Chardonnay',  isCorrect: false },
+        { text: 'Viognier',    isCorrect: false },
+        { text: 'Torrontés',   isCorrect: true  },
+        { text: 'Sauvignon Blanc', isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-3',
+      text:        '¿De qué región francesa es originario el Malbec?',
+      explanation: 'El Malbec es originario de Cahors, en el sudoeste de Francia, donde se lo conoce como Côt o Auxerrois.',
+      category:    'cepas',
+      difficulty:  'medium',
+      options: [
+        { text: 'Burdeos',   isCorrect: false },
+        { text: 'Borgoña',   isCorrect: false },
+        { text: 'Alsacia',   isCorrect: false },
+        { text: 'Cahors',    isCorrect: true  },
+      ],
+    },
+    {
+      id:          'seed-q-4',
+      text:        '¿Qué cepa es ancestro del Cabernet Sauvignon?',
+      explanation: 'El Cabernet Franc es el ancestro del Cabernet Sauvignon. Es más aromático y con menor estructura tánica que su descendiente.',
+      category:    'cepas',
+      difficulty:  'medium',
+      options: [
+        { text: 'Merlot',          isCorrect: false },
+        { text: 'Cabernet Franc',  isCorrect: true  },
+        { text: 'Petit Verdot',    isCorrect: false },
+        { text: 'Malbec',          isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-5',
+      text:        '¿A qué temperatura se sirve el Torrontés?',
+      explanation: 'Los blancos aromáticos como el Torrontés se sirven muy fríos, entre 8 y 10°C, para preservar sus aromas florales de jazmín, rosa y frutas tropicales.',
+      category:    'cepas',
+      difficulty:  'easy',
+      options: [
+        { text: '14–16°C', isCorrect: false },
+        { text: '12–14°C', isCorrect: false },
+        { text: '8–10°C',  isCorrect: true  },
+        { text: '6–8°C',   isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-6',
+      text:        '¿La Bonarda argentina es en realidad qué cepa francesa?',
+      explanation: 'La Bonarda que se planta en Argentina es la Douce Noire de Saboya (Francia), no la Bonarda piamontesa italiana. Es la segunda uva tinta más plantada en Argentina.',
+      category:    'cepas',
+      difficulty:  'hard',
+      options: [
+        { text: 'Monastrell',   isCorrect: false },
+        { text: 'Douce Noire',  isCorrect: true  },
+        { text: 'Barbera',      isCorrect: false },
+        { text: 'Dolcetto',     isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-7',
+      text:        '¿En qué región de Argentina produce mejor el Pinot Noir?',
+      explanation: 'El Pinot Noir requiere climas fríos. En Argentina funciona mejor en el Valle de Uco, Río Negro y la Patagonia, donde las temperaturas bajas preservan su acidez y elegancia.',
+      category:    'cepas',
+      difficulty:  'medium',
+      options: [
+        { text: 'San Juan',         isCorrect: false },
+        { text: 'Luján de Cuyo',    isCorrect: false },
+        { text: 'La Rioja',         isCorrect: false },
+        { text: 'Río Negro/Valle de Uco', isCorrect: true },
+      ],
+    },
+    // ── ELABORACIÓN ────────────────────────────────────────────────────────────
+    {
+      id:          'seed-q-8',
+      text:        '¿Qué microorganismo transforma el azúcar en alcohol durante la fermentación?',
+      explanation: 'Saccharomyces cerevisiae es la levadura principal en la elaboración del vino. Convierte los azúcares del mosto en alcohol etílico y CO₂.',
+      category:    'elaboracion',
+      difficulty:  'easy',
+      options: [
+        { text: 'Lactobacillus',           isCorrect: false },
+        { text: 'Saccharomyces cerevisiae', isCorrect: true  },
+        { text: 'Acetobacter',             isCorrect: false },
+        { text: 'Oenococcus oeni',         isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-9',
+      text:        '¿Qué transforma la fermentación maloláctica?',
+      explanation: 'La FML convierte el ácido málico (más agresivo) en ácido láctico (más suave), reduciendo la acidez percibida y añadiendo complejidad al vino.',
+      category:    'elaboracion',
+      difficulty:  'medium',
+      options: [
+        { text: 'Azúcar en alcohol',           isCorrect: false },
+        { text: 'Ácido tartárico en málico',   isCorrect: false },
+        { text: 'Ácido málico en láctico',     isCorrect: true  },
+        { text: 'Alcohol en ácido acético',    isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-10',
+      text:        '¿Cuál es la principal diferencia entre la elaboración de tinto y blanco?',
+      explanation: 'En los vinos tintos el mosto fermenta con la piel (maceración), extrayendo color y taninos. En los blancos, la piel se separa antes de la fermentación.',
+      category:    'elaboracion',
+      difficulty:  'easy',
+      options: [
+        { text: 'Los blancos fermentan a mayor temperatura',    isCorrect: false },
+        { text: 'Los tintos fermentan con la piel',             isCorrect: true  },
+        { text: 'Los blancos usan levaduras distintas',         isCorrect: false },
+        { text: 'Los tintos no pasan por fermentación maloláctica', isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-11',
+      text:        '¿Qué información es OBLIGATORIA en una etiqueta de vino argentina?',
+      explanation: 'La legislación argentina exige: marca, país de procedencia, grado alcohólico, contenido neto y número de registro del fraccionador.',
+      category:    'elaboracion',
+      difficulty:  'medium',
+      options: [
+        { text: 'La añada',          isCorrect: false },
+        { text: 'El varietal',       isCorrect: false },
+        { text: 'El grado alcohólico', isCorrect: true },
+        { text: 'El winemaker',      isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-12',
+      text:        'Si en una etiqueta se declara varietal, ¿qué porcentaje mínimo de esa uva debe tener el vino?',
+      explanation: 'Según la legislación argentina, si se declara un varietal en la etiqueta, el vino debe contener al menos un 85% de esa uva.',
+      category:    'elaboracion',
+      difficulty:  'medium',
+      options: [
+        { text: '75%', isCorrect: false },
+        { text: '85%', isCorrect: true  },
+        { text: '90%', isCorrect: false },
+        { text: '100%', isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-13',
+      text:        '¿Cuántos meses mínimos de crianza requiere un tinto "Reserva" en Argentina?',
+      explanation: 'La denominación "Reserva" en vinos tintos argentinos requiere una crianza mínima de 12 meses, mientras que en blancos son 6 meses.',
+      category:    'elaboracion',
+      difficulty:  'hard',
+      options: [
+        { text: '6 meses',  isCorrect: false },
+        { text: '12 meses', isCorrect: true  },
+        { text: '18 meses', isCorrect: false },
+        { text: '24 meses', isCorrect: false },
+      ],
+    },
+    // ── CATA ───────────────────────────────────────────────────────────────────
+    {
+      id:          'seed-q-14',
+      text:        '¿Cuántas fases tiene el análisis sensorial del vino?',
+      explanation: 'El análisis sensorial clásico tiene tres fases: visual (color, limpidez, lágrimas), olfativa (aromas primarios, secundarios, terciarios) y gustativa (dulce, ácido, amargo, texturas).',
+      category:    'cata',
+      difficulty:  'easy',
+      options: [
+        { text: 'Dos',    isCorrect: false },
+        { text: 'Tres',   isCorrect: true  },
+        { text: 'Cuatro', isCorrect: false },
+        { text: 'Cinco',  isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-15',
+      text:        '¿Qué indican las "lágrimas" del vino?',
+      explanation: 'Las lágrimas (o piernas) son las trazas que deja el vino en la copa al girarla. Mayor cantidad y grosor indica mayor contenido de alcohol y glicerina (cuerpo).',
+      category:    'cata',
+      difficulty:  'easy',
+      options: [
+        { text: 'Mayor acidez',                  isCorrect: false },
+        { text: 'Mayor dulzor',                  isCorrect: false },
+        { text: 'Mayor alcohol y cuerpo',         isCorrect: true  },
+        { text: 'Mayor contenido de taninos',     isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-16',
+      text:        '¿Los aromas terciarios del vino provienen de...?',
+      explanation: 'Los aromas terciarios, también llamados bouquet, se desarrollan durante la crianza en barrica y/o botella. Los primarios son de la uva y los secundarios de la fermentación.',
+      category:    'cata',
+      difficulty:  'medium',
+      options: [
+        { text: 'La variedad de uva',         isCorrect: false },
+        { text: 'La fermentación alcohólica', isCorrect: false },
+        { text: 'La crianza',                 isCorrect: true  },
+        { text: 'El suelo del viñedo',        isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-17',
+      text:        '¿A qué temperatura se sirven los grandes tintos añejos?',
+      explanation: 'Los grandes tintos con crianza se sirven entre 16 y 18°C para que puedan expresar toda su complejidad aromática y sus taninos se perciban integrados.',
+      category:    'cata',
+      difficulty:  'medium',
+      options: [
+        { text: '12–14°C', isCorrect: false },
+        { text: '14–16°C', isCorrect: false },
+        { text: '16–18°C', isCorrect: true  },
+        { text: '18–20°C', isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-18',
+      text:        '¿Qué compuesto químico da el color rojo/violeta a los vinos tintos?',
+      explanation: 'Los antocianos son los pigmentos presentes en el hollejo de la uva tinta. Se extraen durante la maceración y son los responsables del color rojo-violeta en vinos jóvenes.',
+      category:    'cata',
+      difficulty:  'hard',
+      options: [
+        { text: 'Taninos',    isCorrect: false },
+        { text: 'Antocianos', isCorrect: true  },
+        { text: 'Polifenoles', isCorrect: false },
+        { text: 'Flavonoles', isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-19',
+      text:        '¿Cuál es la progresión del color en un tinto a medida que envejece?',
+      explanation: 'Los tintos jóvenes son violáceos/rubíes. Con el tiempo evolucionan hacia granate y finalmente teja (tono anaranjado/marrón), indicando madurez avanzada.',
+      category:    'cata',
+      difficulty:  'medium',
+      options: [
+        { text: 'Rubí → violeta → teja',      isCorrect: false },
+        { text: 'Violeta → rubí → teja',      isCorrect: true  },
+        { text: 'Granate → violeta → ámbar',  isCorrect: false },
+        { text: 'Teja → granate → violeta',   isCorrect: false },
+      ],
+    },
+    // ── HISTORIA ───────────────────────────────────────────────────────────────
+    {
+      id:          'seed-q-20',
+      text:        '¿Qué plaga devastó los viñedos europeos a partir de 1868?',
+      explanation: 'La filoxera (Daktulosphaira vitifoliae), un insecto originario de América del Norte, llegó a Europa en 1868 y devastó casi todos los viñedos del continente entre 1870 y 1900.',
+      category:    'historia',
+      difficulty:  'easy',
+      options: [
+        { text: 'Oidio',     isCorrect: false },
+        { text: 'Mildiu',    isCorrect: false },
+        { text: 'Filoxera',  isCorrect: true  },
+        { text: 'Botrytis',  isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-21',
+      text:        '¿Cuál fue la solución a la filoxera en Europa?',
+      explanation: 'La solución fue injertar las variedades europeas (Vitis vinifera) sobre portainjertos de variedades americanas resistentes al parásito.',
+      category:    'historia',
+      difficulty:  'medium',
+      options: [
+        { text: 'Fungicidas sistémicos',                        isCorrect: false },
+        { text: 'Injertar en portainjertos americanos',         isCorrect: true  },
+        { text: 'Riego por inundación',                         isCorrect: false },
+        { text: 'Replantación con variedades resistentes',      isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-22',
+      text:        '¿En qué año llegó el ferrocarril a Mendoza, expandiendo masivamente la vitivinicultura?',
+      explanation: 'La llegada del ferrocarril a Mendoza en 1885 permitió transportar vino a Buenos Aires de forma eficiente, impulsando la expansión masiva de los viñedos mendocinos.',
+      category:    'historia',
+      difficulty:  'hard',
+      options: [
+        { text: '1853', isCorrect: false },
+        { text: '1868', isCorrect: false },
+        { text: '1885', isCorrect: true  },
+        { text: '1902', isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-23',
+      text:        '¿Quién introdujo cepajes franceses en Mendoza bajo la gobernación de Sarmiento?',
+      explanation: 'Michel Aimé Pouget, agrónomo francés, introdujo en 1853 los primeros cepajes finos franceses en la Escuela de Agricultura de Mendoza, durante la gobernación de Sarmiento.',
+      category:    'historia',
+      difficulty:  'hard',
+      options: [
+        { text: 'Nicola Catena',        isCorrect: false },
+        { text: 'Michel Aimé Pouget',   isCorrect: true  },
+        { text: 'Alberto Zuccardi',     isCorrect: false },
+        { text: 'Tiburcio Benegas',     isCorrect: false },
+      ],
+    },
+    // ── REGIONES ───────────────────────────────────────────────────────────────
+    {
+      id:          'seed-q-24',
+      text:        '¿Cuál es la primera denominación de origen controlada del Malbec en Argentina?',
+      explanation: 'El DOC Luján de Cuyo fue la primera denominación de origen controlada para Malbec en Argentina, garantizando que el vino proviene exclusivamente de ese distrito.',
+      category:    'regiones',
+      difficulty:  'hard',
+      options: [
+        { text: 'DOC Valle de Uco',       isCorrect: false },
+        { text: 'DOC Luján de Cuyo',      isCorrect: true  },
+        { text: 'DOC Cafayate',           isCorrect: false },
+        { text: 'DOC Maipú',              isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-25',
+      text:        '¿A qué altitud máxima llegan los viñedos de los Valles Calchaquíes (Salta)?',
+      explanation: 'Los viñedos de los Valles Calchaquíes en Salta alcanzan hasta 3000 metros sobre el nivel del mar, siendo los más altos del mundo en producción comercial.',
+      category:    'regiones',
+      difficulty:  'medium',
+      options: [
+        { text: '1500 msnm', isCorrect: false },
+        { text: '2000 msnm', isCorrect: false },
+        { text: '2500 msnm', isCorrect: false },
+        { text: '3000 msnm', isCorrect: true  },
+      ],
+    },
+    {
+      id:          'seed-q-26',
+      text:        '¿Cuál es la provincia vitivinícola más austral de Argentina?',
+      explanation: 'Río Negro, en la Patagonia argentina, es la región vitivinícola más austral, ubicada a 39° de latitud sur. Sus condiciones frías favorecen blancos elegantes y Pinot Noir de estilo borgoñón.',
+      category:    'regiones',
+      difficulty:  'medium',
+      options: [
+        { text: 'Neuquén',       isCorrect: false },
+        { text: 'Chubut',        isCorrect: false },
+        { text: 'Río Negro',     isCorrect: true  },
+        { text: 'Santa Cruz',    isCorrect: false },
+      ],
+    },
+    {
+      id:          'seed-q-27',
+      text:        '¿Qué sub-región mendocina se encuentra entre 900 y 1500 msnm de altitud?',
+      explanation: 'El Valle de Uco, con sus distritos Tupungato, Tunuyán y San Carlos, se ubica entre 900 y 1500 msnm. Esta altitud le otorga amplitud térmica diaria ideal para vinos de alta expresión.',
+      category:    'regiones',
+      difficulty:  'easy',
+      options: [
+        { text: 'Luján de Cuyo', isCorrect: false },
+        { text: 'Maipú',         isCorrect: false },
+        { text: 'Valle de Uco',  isCorrect: true  },
+        { text: 'Rivadavia',     isCorrect: false },
+      ],
+    },
+  ]
+
+  for (const q of questions) {
+    const { id, options, ...rest } = q
+    await prisma.question.upsert({
+      where: { id },
+      update: {
+        ...rest,
+        options: {
+          deleteMany: {},
+          create: options,
+        },
+      },
+      create: {
+        id,
+        ...rest,
+        options: {
+          create: options,
+        },
+      },
+    })
+  }
+  console.log(`✓ ${questions.length} preguntas de quiz cargadas`)
+}
+
 async function main() {
   console.log('Ejecutando seed...')
   await seedAdmin()
   await seedWineries()
   await seedGrapes()
   await seedStudyTopics()
+  await seedQuestions()
   console.log('Seed completado')
 }
 

@@ -24,5 +24,6 @@ enum APIConstants {
         static let wineries      = "/wineries"
         static let grapes        = "/grapes"
         static let studyTopics   = "/study-topics"
+        static let questions     = "/questions"
     }
 }
